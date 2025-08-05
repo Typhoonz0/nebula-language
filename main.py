@@ -31,8 +31,9 @@ class Builtins:
         return type(args[0]).__name__
     
     def print(args):
-        # repr() prints the proper way since it may expand lists [1, 2, 3] into 1 2 3 when we don't want that
-        print(*[repr(a) for a in args])
+        for a in args:
+            print(a, end="")
+        print()
 
     def printf(args):
         # we only use codecs here so it makes sense for readability
