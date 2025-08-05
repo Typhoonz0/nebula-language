@@ -1,0 +1,9 @@
+// Example to be used in the README. Inspired by F#'s website
+hello = lambda (s) { printf("Hello, ", s, "", "\n") }
+
+greets = [
+    "World"
+    "Solar System"
+]
+
+map(hello, greets)

@@ -1,0 +1,9 @@
+// Testing out optional arguments
+def f(x=1, y=2) {
+    print(x + y)
+}
+
+four = 4
+f(3, four) // 7
+f(5) // 7
+f(y=6) // 7

@@ -1,0 +1,10 @@
+// Dicts sometimes register as blocks
+key = 'a'
+value = 1
+d = {
+    key: value
+    'x': 'y'
+    'c': {'a': 'nested'}
+}
+print(d['a'], d['c']['a'])
+

@@ -1,0 +1,11 @@
+// Testing out anonymous functions
+
+lambda (x, y) { 
+        print(x * y)
+}(6, 0)
+
+z = lambda (x, y) { 
+        print(x + y)
+}
+
+z(1, 2)

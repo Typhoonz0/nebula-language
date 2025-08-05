@@ -1,0 +1,8 @@
+// Typehints aren't enforced by the interpreter
+
+def f(x :: <int> ) :: <int> {
+    x * x
+}
+
+x ::<int> = 4
+print(f(x))

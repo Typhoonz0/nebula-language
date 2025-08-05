@@ -1,0 +1,53 @@
+{	
+	"include": {
+		"prefix": "include",
+		"body": "include(${1:file})",
+		"description": "Include a file."
+	},
+	"return": {
+		"prefix": "return",
+		"body": "return ${1:data}",
+		"description": "Return data."
+	},
+
+	"function": {
+	  "prefix": "def",
+	  "body": 
+	  	[
+			"def ${1:function} (${2:}) {",
+	   		"\t$0",
+			"}"
+		],
+	  "description": "A function."
+	},
+	"for loop": {
+		"prefix": "for",
+		"body": 
+			[
+				"for (${1:i}, ${2:iterable}, ${3:1}) {",
+				"\t$0",
+				"}"
+		  ],
+		"description": "A for loop."
+	  },
+	  "while loop": {
+		"prefix": "while",
+		"body": 
+			[
+				"while (${1:condition}) {",
+				"\t$0",
+				"}"
+		  ],
+		"description": "A while loop."
+	  },
+	  "if statement": {
+		"prefix": "if",
+		"body": 
+			[
+				"if (${1:condition}) {",
+				"\t$0",
+				"}"
+		  ],
+		"description": "A if statement."
+	  }
+}

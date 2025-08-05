@@ -1,0 +1,10 @@
+c = 1
+
+ffi {
+  print('Python code here! Old c');
+  print(c);
+  c += 5;
+}
+
+// Should print 6
+print(c)

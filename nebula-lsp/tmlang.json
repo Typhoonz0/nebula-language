@@ -1,0 +1,50 @@
+{
+	"name": "fn Language",
+	"scopeName": "source.fn",
+	"patterns": [
+	  {
+		"name": "comment.block.fn",
+		"begin": "/\\*",
+		"end": "\\*/",
+		"beginCaptures": {
+		  "0": { "name": "comment.block.begin.fn" }
+		},
+		"endCaptures": {
+		  "0": { "name": "comment.block.end.fn" }
+		}
+	  },    
+	  { "name": "comment.line.fn", "match": "\\//.*" },    
+	  { "name": "keyword.control.fn", "match": "\\b(class|def|ffi|return|for|in|while|match|case|assert|if|elif|else|try|catch|throw|break|continue|global)\\b" },
+	  { "name": "keyword.operator.fn", "match": "%|\\*=|\\*|\\++|--|\\+=|-=|\\/=|%=|\\+|-|\\/|=|!=|==|>=|<=|>|<|\\?|\\:|\\b(and|or|not)\\b" },
+	  { "name": "entity.name.class.fn", "match":  "(?<=^\\s*class\\s)[\\w/\\.-]+"},
+	  { "name": "storage.type.fn", "match": "\\b(lambda|kwargs|int|float|str|bool|list|tuple|any|void|dict)\\b" },
+	  { "name": "constant.numeric.fn", "match": "\\bTrue|\\bFalse|\\bNone|\\b\\d+\\b" },
+	  { "name": "entity.name.function.fn", "match": "[a-zA-Z_][a-zA-Z0-9_]*\\(" },
+	  {
+		"name": "string.quoted.single.fn",
+		"begin": "'",
+		"end": "'",
+		"beginCaptures": {
+		  "0": { "name": "punctuation.definition.string.begin.fn" }
+		},
+		"endCaptures": {
+		  "0": { "name": "punctuation.definition.string.end.fn" }
+		}
+	  },
+	  {
+		"name": "string.quoted.double.fn",
+		"begin": "\"",
+		"end": "\"",
+		"beginCaptures": {
+		  "0": { "name": "punctuation.definition.string.begin.fn" }
+		},
+		"endCaptures": {
+		  "0": { "name": "punctuation.definition.string.end.fn" }
+		}
+	  }
+	  
+	],
+	"repository": {},
+	"scope": "text.fn"
+  }
+  

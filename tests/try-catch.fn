@@ -1,0 +1,14 @@
+// Testing out try/catch/throw flow
+def boom() {
+  throw "no"
+}
+
+def main() {
+  try {
+    boom()
+  } catch (err) {
+    print("Caught error: "+err)
+  }
+}
+
+main()

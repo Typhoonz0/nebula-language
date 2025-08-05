@@ -1,0 +1,31 @@
+// First ever nebula program
+def f(x) {
+    return x + x
+}
+
+def la() {
+    x = 40
+    1 + 1
+    def nested() {
+        print("1")
+        print(2)
+        1
+    }
+
+    print(x)
+    if (1 == 1) {
+        print("hello world")
+    } elif (1 < 2) {
+        print(x)
+    } else {
+        print(3)
+    }
+    nested()
+}
+
+def g(l, n) 
+{ 
+    l(n)
+}
+
+print(f(1) + 1, 100, g(la, 1), [[1, 2], 2, 3][0][1])

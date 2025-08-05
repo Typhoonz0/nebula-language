@@ -1,0 +1,16 @@
+// There is now a builtin map() function, see 'builtin-functools.fn'
+// This is just for demonstration
+
+def map(function, list) {
+    result = []
+    for (i, list, 1) {
+        result.append(function(i))
+    }
+    return result
+}
+
+def f(x) { x * x }
+
+print(map(lambda (x){x * x}, [1, 2, 3]))
+
+print(map(f, [1, 2, 3]))

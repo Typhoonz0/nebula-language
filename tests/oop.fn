@@ -1,0 +1,32 @@
+// Testing out object oriented principles
+class Getfullname {
+    // Methods inside classes
+    def self.fullName() {
+        self.firstname + " " + self.lastname
+    }
+}
+
+class Person(Getfullname) {
+    
+    firstname = "John"
+    lastname = "Doe"
+    age = 34
+                   
+    class Getfullage {
+        def getAge(cls) {
+            cls.age
+        }
+    }
+    // Declare any non constructor variables below so a new instance doesn't overwrite it
+    getAge = Getfullage.getAge 
+}
+// Polymorphism
+def getInfo(user) {
+    print(user.fullName())
+    print(user.getAge(user))
+}
+
+person1 = Person()
+person2 = Person("Jane", "Doe", 43)
+getInfo(person1)
+getInfo(person2)

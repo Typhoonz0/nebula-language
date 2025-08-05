@@ -1,0 +1,104 @@
+/*
+brainfuck interpreter in nebula
+*/
+
+def execute(file) {
+    f = open(file, "r")
+    evaluate(f.read())
+    f.close()
+}
+
+def evaluate(code) {
+    code = clean(list(code))
+    brace = buildbracemap(code)
+    cells = [0]
+    codeptr = 0
+    cellptr = 0
+    while (codeptr < length(code)) {
+        command = code[codeptr]
+        if (command == ">") {
+            cellptr += 1
+            if (cellptr == length(cells)) {
+                cells.append(0)
+            }
+            codeptr += 1
+        }
+        elif (command == "<") {
+            if (cellptr > 0) {
+                cellptr -= 1
+            }
+            codeptr += 1
+        }
+        elif (command == "+") {
+            cells[cellptr] += 1
+            codeptr += 1
+        }
+        elif (command == "-") {
+            cells[cellptr] -= 1
+            codeptr += 1
+        }
+        elif (command == "[") {
+            if (cells[cellptr] == 0) {
+                codeptr = brace[codeptr] + 1 
+            } else {
+                codeptr += 1
+            }
+        }
+        elif (command == "]") {
+            if (cells[cellptr] != 0) {
+                codeptr = brace[codeptr] + 1  
+            } else {
+                codeptr += 1
+            }
+        }
+        elif (command == ".") {
+            printf(chr(cells[cellptr]), " ", "")
+            codeptr += 1
+        }
+        elif (command == ",") {
+            inp = input("")
+            try {
+                cells[cellptr] = int(inp)
+            } catch {
+                cells[cellptr] = ord(inp)
+            }
+            codeptr += 1
+        }
+        else {
+            codeptr += 1 
+        }
+    }
+}
+def clean(code) {
+    result = []
+    for (char, code, 1) {
+        if (char in ['.', ',', '[', ']', '<', '>', '+', '-']) {
+            result.append(char)
+        }
+    }
+    return ''.join(result)
+}
+
+def buildbracemap(code) {
+    temp = []
+    brace = {}
+    i = 0
+    while (i < length(code)) {
+        cmd = code[i]
+        if (cmd == "[") {
+            temp.append(i)
+        } elif (cmd == "]") {
+            start = temp.pop()
+            brace[start] = i
+            brace[i] = start
+        }
+        i += 1
+    }
+    return brace
+}
+
+if (__argc == 3) {
+    execute(__argv[2])
+} else {
+    print("Usage:", __argv[0], "filename.bf")
+}

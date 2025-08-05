@@ -1,0 +1,9 @@
+// lib.fn
+def copy(src, dest) {
+    f = open(src)
+    l = f.read()
+    g = open(dest, "wy")
+    g.write(l)
+}
+
+a = 1

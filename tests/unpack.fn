@@ -1,0 +1,15 @@
+// Testing the * unpack operator
+
+def arg(*args) {
+    print('s')
+    for (i, args, 1) {
+        print(i)
+    }
+    print(*args)
+}
+
+arg(1, 2, 3)
+arg("Hello World", 1)
+print(*[1, 2, 3])
+
+arg(100, *[1, 2, 3])

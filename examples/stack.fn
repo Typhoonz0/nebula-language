@@ -1,0 +1,17 @@
+// Testing out classes to make a new data structure - the stack
+
+class Stack {
+    data 
+    x = 1
+    cap = 1000
+    def self.push(dat) {
+        if (self.cap > length(self.data)) {
+            self.data.append(dat)
+        }
+    }
+
+    def self.pop() {
+        self.data.pop()
+    }
+}
+

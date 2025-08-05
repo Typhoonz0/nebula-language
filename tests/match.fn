@@ -1,0 +1,11 @@
+b = "Hello"
+c = match (b) {
+    case 0 { 
+        print("Cases can be blocks")
+    }
+    case 1 | 2 { "One or two" }
+    case "string" { "A string" }
+    else { "None of the above" }
+}
+
+print(c)

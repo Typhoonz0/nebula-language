@@ -1,0 +1,4 @@
+// Testing builtin map, filter, reduce functions
+print(map(lambda (x) { x * 2 }, [1, 2, 3]))
+print(filter(lambda (x) { x > 1 }, [1, 2, 3]))
+print(reduce(lambda (a, b) { a + b }, [1, 2, 3]))

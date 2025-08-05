@@ -1,0 +1,13 @@
+// include() returns an object to operate with as if it were an instance of a class
+stack = include("@stack")
+s = stack.Stack([], cap=10) // Creates a new empty stack
+
+s.push(0) // Add some data to the stack
+s.push(1) 
+s.push(2)
+
+print(s.data) // Stack = 0, 1, 2
+
+s.pop() // Remove the last element on the stack
+s.pop()
+print(s.data) // Stack = 0

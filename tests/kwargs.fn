@@ -1,0 +1,15 @@
+// Testing out keyword arguments
+def foo(a, b, c) {
+    print(a, b, c)
+}
+obj = {'b':10, 'c':'lee'}
+
+foo(100, **obj)
+
+a = **obj 
+
+foo(100, **a)
+
+def bar() { return **obj }
+foo(10, **bar())
+

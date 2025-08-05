@@ -1,0 +1,61 @@
+/* i made a stack based programming lanugage, am planning to build a full interpreter soon*/
+
+pf = open(__argv[2]) 
+slines = pf.readlines()
+lines = []
+for (i, slines, 1) {
+    lines.append(i.strip())
+}
+program = []
+token_counter = 0
+label = {}
+
+for (line, lines, 1) {
+    print(program)
+    parts = line.split()
+    code = parts[0].strip()
+
+    if (code == "") {
+        continue
+    } 
+
+    if (code[0] == "$") {
+        continue
+    }
+    
+    if (code[-1] == ":") {
+        label[code[:-1]] = token_counter
+        continue
+    } 
+    
+    program.append(code)
+    token_counter++
+
+    if (code in ["push", "stack", "stacksize"]) {
+        number = int(float(parts[1]))
+        program.append(number)
+        token_counter++
+    } elif (code in ["out", "shell", "external", "prompt", "comment"]) {
+        fs = ' '.join(parts[1:])
+        string_literal = fs.split('$')[0]
+
+        string_literal = string_literal.strip()
+        program.append(string_literal)
+        token_counter++
+    }
+    elif (code in ["goto"]) {
+        label = parts[1]
+        program.append(label)
+        token_counter++
+    }
+    elif (code in ["ifequ","ifneq","ifgtr","iflsr","ifequsp","ifgtrsp","iflsrsp","ifneqsp", "for"]) {
+        v = parts[1]
+        program.append(v)
+        token_counter += 1
+        label = parts[2]
+        program.append(label)
+        token_counter += 1
+    }
+}
+
+print(program)
