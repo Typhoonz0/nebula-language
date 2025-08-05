@@ -29,7 +29,7 @@ Download this repository, run `main.py` with a file name to run a script, or wit
 >>> 2 + 2
 4
 >>> 'Hello World'
-Hello World
+Hello World 
 ``` 
 ## Examples!
 Look inside `examples/` in this repository!
