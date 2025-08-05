@@ -8,7 +8,7 @@ a general purpose, simple language
 
 ```python
 def example() {
-    hello = lambda (s) { printf("Hello, ", s, "", "\n") }
+    hello = lambda (s) { print("Hello, ", s) }
 
     greets = [
         "World"
