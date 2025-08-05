@@ -233,6 +233,9 @@ calculateBankBalance(**balanceDB)
 s interpeter has functions built in to the interpreter:
 #### `print(args)`
 Prints _args_ to the screen.
+#### `printf(args, sep=" ", end="\n")`
+Prints _args_ to the screen, seperating each argument with _sep_ and ending with _stop_. <br>
+_sep_ and _end_ **must** be declared last.
 #### `range(start=0, stop, step=1)` 
 Returns a list of numbers starting from _start_ to _stop_ with _step_.
 #### `input(prompt="")` 
