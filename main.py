@@ -178,7 +178,6 @@ class Interpreter(Tokenizer, Parser):
     """Main interpreter class."""
 
     def __init__(self):
-        """Even though this isn't an object orinted language, class methods still apply here."""
         self.classs = {}
         self.string_methods = {
             'reverse': lambda s: s[::-1],
