@@ -1,0 +1,7 @@
+// Retrieves the first 1000 prime numbers using list comprehension:
+print(
+	[n | n, range(2, 1000), 1 | True not in
+		[True | d, range(2,(int(n/2)+1)), 1 | ((n % d) == 0) and n != 2]
+	]
+	
+)

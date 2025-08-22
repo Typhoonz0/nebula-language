@@ -2,7 +2,7 @@
 hello = lambda (s) { printf("Hello, ", s, "", "\n") }
 
 greets = [
-    "World"
+    "World",
     "Solar System"
 ]
 

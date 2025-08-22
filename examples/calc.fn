@@ -1,0 +1,16 @@
+// calc is short for calculator
+
+while (True) {
+    one = int(input("First Number: "))
+    op = input("Operation (+, -, *, /): ")
+    two = int(input("Second Number: "))
+    
+    result = match (op) {
+        case '+' { one + two }
+        case '-' { one - two }
+        case '*' { one * two }
+        case '/' { one == 0 or two == 0 ? one / two : print("Cannot divide by 0.") }
+        else { print("Enter a valid operator.") }
+    }
+    print(result)
+}

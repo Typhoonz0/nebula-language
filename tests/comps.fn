@@ -1,0 +1,13 @@
+// testing out container comprehensions
+s = [ x * x | x, range(5), 1 | True ]
+squares = { x | x * x, x, range(1, 10) }
+print(s)
+print(squares)
+
+// Example to be used in the README modified to use a lambda. Inspired by F#'s website
+lambda () {[print('Hello', g) | g, [ "World", "Solar System" ], 1]}()
+
+// Calculates the first 100 prime numbers
+lambda() {
+  print([n | n, range(2, 100), 1 | not [1 | x, range(2, int(pow(n, 0.5))), 1 | ((n % x) == 0)]])
+}()

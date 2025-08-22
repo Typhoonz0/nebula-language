@@ -1,4 +1,4 @@
-EXCLUDE := tests/calc.fn tests/file.fn tests/e120.fn examples/test.bf
+EXCLUDE := tests/calc.fn tests/file.fn tests/e120.fn examples/test.bf examples/calc.fn examples/stack.fn
 TESTS := $(filter-out $(EXCLUDE), $(wildcard tests/*))
 EXAMPLES := $(filter-out $(EXCLUDE), $(wildcard examples/*))
 .PHONY: all examples

@@ -69,6 +69,7 @@ def evaluate(code) {
         }
     }
 }
+
 def clean(code) {
     result = []
     for (char, code, 1) {

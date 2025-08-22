@@ -233,9 +233,6 @@ calculateBankBalance(**balanceDB)
 s interpeter has functions built in to the interpreter:
 #### `print(args)`
 Prints _args_ to the screen.
-#### `printf(args, sep=" ", end="\n")`
-Prints _args_ to the screen, seperating each argument with _sep_ and ending with _stop_. <br>
-_sep_ and _end_ **must** be declared last.
 #### `range(start=0, stop, step=1)` 
 Returns a list of numbers starting from _start_ to _stop_ with _step_.
 #### `input(prompt="")` 
@@ -312,7 +309,7 @@ The contents of the arguments the script ran with.
 
 ## Including External Functions
 Functions are included into our script with:
-- The **`include`** keyword
+- The **`include`** function
 - The libraries **name**
 
 All data in that file is given to the assigned variable and can be called upon like a class.
@@ -331,7 +328,13 @@ lib = include("lib.fn")
 lib.copy("a.txt", "b.txt")
 ```
 
-The `include` statement is the only thing interpeted before functions. Any other code will be ignored if it is not within a function.
+The `include` function is the only thing interpeted before anything else. 
+It can take a `@` symbol to resolve the location of the file to the PATH.
+It can also infer the file extension.
+
+```rust
+stack = include("@stack") // Resolved to tests/stack etc
+```
 
 ## If, elif, else
 If statements can have any amount of elif (else if) statements and a singular else statement is optional.

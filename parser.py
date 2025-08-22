@@ -196,14 +196,18 @@ class Parser:
         while True:
             tok = self.current()
             # Comparison (e.g. 1 > 2)
+
             if tok[1] == "in":
-                self.eat('KEYWORD', 'in') 
+                self.eat('KEYWORD', 'in')
                 right = self.parse_expression()
                 node = ('in', node, right)
-            if tok[1] == "not":
-                self.eat('KEYWORD', 'not') 
+
+            if tok[1] == "not" and self.peek()[1] == "in":
+                self.eat('KEYWORD', 'not')
+                self.eat('KEYWORD', 'in')
                 right = self.parse_expression()
-                node = ('not', node, right)
+                node = ('nin', node, right)
+
             if tok[1] == "and":
                 self.eat('KEYWORD', 'and') 
                 right = self.parse_expression()
@@ -292,7 +296,7 @@ class Parser:
                         node = ('num', combined)
                         continue  # Keep going until we whittle down the float expression 
                     else:
-                        raise SyntaxError("Attribute access must be followed by an identifier")
+                        raise SyntaxError("Attribute access must be followed by an ident")
                 _, attr = self.eat('IDENT')
                 node = ('getattr', node, attr)
 
@@ -390,7 +394,6 @@ class Parser:
 
             return node
 
-        # Dictionary or blocks
         if val == '{':
             self.eat('SYMBOL', '{')
             
@@ -399,7 +402,7 @@ class Parser:
                 self.eat('SYMBOL', '}')
                 return ('dict', [])  # empty dict
 
-            # Else scan for colon to decide dict vs block
+            # Scan tokens to detect if it's a dict or block
             is_dict = False
             pos = self.pos
             depth = 1
@@ -409,47 +412,120 @@ class Parser:
                     depth += 1
                 elif tval == '}':
                     depth -= 1
-                elif tval == ':' and depth == 1:
+                elif (tval == ':' or tval == '|') and depth == 1:
                     is_dict = True
                     break
                 pos += 1
 
             if is_dict:
-                items = []
-                while self.current()[1] != '}':
-                    key = self.parse_expression()
+                # Parse key expression first
+                key_expr = self.parse_expression()
+
+                if self.current()[1] == '|':
+                    # Pipe-based dict comprehension syntax:
+                    self.eat('SYMBOL', '|')
+                    value_expr = self.parse_expression()
+
+                    self.eat('SYMBOL', ',')
+                    var_name = self.eat('IDENT')[1]
+
+                    self.eat('SYMBOL', ',')
+                    iterable = self.parse_expression()
+
+                    condition = None
+                    if self.current()[1] == '|':
+                        self.eat('SYMBOL', '|')
+                        condition = self.parse_expression()
+
+                    self.eat('SYMBOL', '}')
+                    return ('dictcomp', key_expr, value_expr, var_name, iterable, condition)
+
+                elif self.current()[1] == ':':
+                    # Regular dict key:value pairs
                     self.eat('SYMBOL', ':')
-                    value = self.parse_expression()
-                    if self.current()[1] == ',':
-                        self.eat('SYMBOL', ',')
-                    items.append((key, value))
-                self.eat('SYMBOL', '}')
-                return ('dict', items)
+                    value_expr = self.parse_expression()
+
+                    items = [(key_expr, value_expr)]
+                    while self.current()[1] != '}':
+                        if self.current()[1] == ',':
+                            self.eat('SYMBOL', ',')
+                        k = self.parse_expression()
+                        self.eat('SYMBOL', ':')
+                        v = self.parse_expression()
+                        items.append((k, v))
+
+                    self.eat('SYMBOL', '}')
+                    return ('dict', items)
+
+                else:
+                    # Fallback block if no colon or pipe after key expr
+                    block = self.parse_block(until='}')
+                    self.eat('SYMBOL', '}')
+                    return ('block', block)
+
             else:
+                # Not a dict: parse as a block
                 block = self.parse_block(until='}')
                 self.eat('SYMBOL', '}')
                 return ('block', block)
 
-        
         if val == '[':
             self.eat('SYMBOL', '[')
-            items = []
-            while not (self.current()[0] == 'SYMBOL' and self.current()[1] == ']'):
+
+            if self.current()[1] == ']':
+                self.eat('SYMBOL', ']')
+                return ('list', [])
+
+            # Parse result expression
+            result_expr = self.parse_expression()
+
+            # Check for custom list comprehension syntax
+            if self.current()[0] == 'SYMBOL' and self.current()[1] == '|':
+                self.eat('SYMBOL', '|')
+
+                # Parse (var, iterable, step)
+                var = self.eat('IDENT')[1]
+                self.eat('SYMBOL', ',')
+                iterable = self.parse_expression()
+                self.eat('SYMBOL', ',')
+                step = self.parse_expression()
+
+                # Optional condition
+                condition = None
+                if self.current()[0] == 'SYMBOL' and self.current()[1] == '|':
+                    self.eat('SYMBOL', '|')
+                    condition = [self.parse_expression()]
+                    while self.current()[0] == 'SYMBOL' and self.current()[1] == '|':
+                        self.eat('SYMBOL', '|')
+                        condition.append(self.parse_expression())
+
+
+                self.eat('SYMBOL', ']')
+                return ('listcomp', result_expr, var, iterable, step, condition)
+
+            # Regular list
+            items = [result_expr]
+            while self.current()[0] == 'SYMBOL' and self.current()[1] == ',':
+                self.eat('SYMBOL', ',')
                 items.append(self.parse_expression())
-                if self.current()[0] == 'SYMBOL' and self.current()[1] == ',':
-                    self.eat('SYMBOL', ',')
+
             self.eat('SYMBOL', ']')
             return ('list', items)
+
 
         # Match/Case
         if val == 'match':
             return self.parse_match()
-                # Match/Case
+            # Match/Case
         if val == 'not':
             self.eat('KEYWORD', 'not')
+            if self.current()[0] == 'KEYWORD' and self.current()[1] == 'in':
+                self.eat('KEYWORD', 'in')
+                right = self.parse_expression()
+                return ('notin', None, right)  # adjust as needed
             expr = self.parse_primary()
             return ('not', expr)
-        
+
         # Negative numbers get parsed to here, just return the negative version of the next number
         if val == "-":
             self.eat('OP', '-')

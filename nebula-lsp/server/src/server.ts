@@ -185,8 +185,12 @@ async function validateTextDocument(textDocument: TextDocument): Promise<Diagnos
 		/([a-zA-Z_]\w*)\s*=/g,
 		/([a-zA-Z_]\w*)\s*::\s*[a-zA-Z_][\w]*\s*=/g,
 		/\bfor\s*\(\s*([a-zA-Z_]\w*)/g,
-
+		/\[\s*.*\s+for\s+([a-zA-Z_]\w*)\s+in\s+.*?\]/g,
+		/\{\s*.*:\s*.*\s+for\s+([a-zA-Z_]\w*)\s+in\s+.*?\}/g,
+	
+		/\|\s*([a-zA-Z_]\w*)\s*,/g
 	];
+	
 	
 	for (const pattern of declarationPatterns) {
 		let match: RegExpExecArray | null;

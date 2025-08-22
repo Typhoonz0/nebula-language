@@ -2,7 +2,7 @@
 the nebula programming language
 """
 PATH = ["tests", "lib", "examples"]
-VERSION = 1.0
+VERSION = 1.05
 import sys, os
 sys.dont_write_bytecode = True
 import re
@@ -31,9 +31,8 @@ class Builtins:
         return type(args[0]).__name__
     
     def print(args):
-        for a in args:
-            print(a, end="")
-        print()
+        # repr() prints the proper way since it may expand lists [1, 2, 3] into 1 2 3 when we don't want that
+        print(*[repr(a) for a in args])
 
     def printf(args):
         # we only use codecs here so it makes sense for readability
@@ -178,6 +177,7 @@ class Interpreter(Tokenizer, Parser):
     """Main interpreter class."""
 
     def __init__(self):
+        """Even though this isn't an object orinted language, class methods still apply here."""
         self.classs = {}
         self.string_methods = {
             'reverse': lambda s: s[::-1],
@@ -223,6 +223,9 @@ class Interpreter(Tokenizer, Parser):
             'filter': lambda args, interpreter: Builtins.filter(args, interpreter),
             'reduce': lambda args, interpreter: Builtins.reduce(args, interpreter),
             'chr': lambda args, _: chr(args[0]),
+            'all': lambda args, _: all(args),
+            'any': lambda args, _: any(args),
+            'pow': lambda args, _: pow(args[0], args[1]),
             'ord': lambda args, _: ord(args[0]),
             'include': self.include_module,
             'True': True,
@@ -266,8 +269,11 @@ class Interpreter(Tokenizer, Parser):
         return result
 
     def execute(self, node, scope):
-     #   print(node)
         """Executes just a node (token within tokens)."""
+        # This will probably break, however some nodes like nin parse incorrectly
+        if len(node) == 1 and node[0] not in ['break', 'continue']:
+            node = node[0]
+
         kind = node[0]
         if kind == 'include':
             _, filename = node
@@ -296,7 +302,11 @@ class Interpreter(Tokenizer, Parser):
             right = self.execute(node[2], scope)
             return left in right
         
-
+        if kind == 'nin':
+            left = self.execute(node[1], scope)
+            right = self.execute(node[2], scope)
+            return not left in right
+        
         if kind == 'and':
             left, right = node[1], node[2]
             left_val = self.execute(left, scope)
@@ -318,7 +328,6 @@ class Interpreter(Tokenizer, Parser):
         if kind == 'ternary':
             _, cond, true_expr, false_expr = node
             cond_val = self.execute(cond, scope)
-           
             if cond_val:
                 return self.execute(true_expr, scope)
             else:
@@ -340,10 +349,39 @@ class Interpreter(Tokenizer, Parser):
         if kind == 'list':
             items = node[1] or []
             return [self.execute(item, scope) for item in items]
+        if kind == 'listcomp':
+            expr, var, iterable, step, condition = node[1:]
+            values = []
+            iter_val = self.execute(iterable, scope)
+            step_val = self.execute(step, scope)
+            for i in range(0, len(iter_val), step_val):
+                item = iter_val[i]
+                scope[var] = item
+                cond_result = True
+                if condition is not None:
+                    cond_result = self.execute(condition, scope)
+                if cond_result:
+                    values.append(self.execute(expr, scope))
+            return values
+
 
         if kind == 'dict':
             items = node[1] or {}
             return {self.execute(key, scope): self.execute(val, scope) for key, val in items}
+        
+        if kind == 'dictcomp':
+            _, key_expr, val_expr, var, iterable_expr, cond_expr = node
+            result = {}
+            iterable = self.execute(iterable_expr, scope)
+
+            for item in iterable:
+                scope[var] = item
+                if cond_expr is None or self.execute(cond_expr, scope):
+                    k = self.execute(key_expr, scope)
+                    v = self.execute(val_expr, scope)
+                    result[k] = v
+
+            return result
 
         if kind == 'var':
             name = node[1]

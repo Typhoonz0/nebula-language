@@ -5,10 +5,11 @@ a general purpose, simple language
 - Inferred typing
 - Object oriented
 - Simple to learn
+- Powerful 
 
 ```python
 def example() {
-    hello = lambda (s) { print("Hello, ", s) }
+    hello = lambda (s) { print("Hello", s) }
 
     greets = [
         "World"
@@ -22,6 +23,14 @@ def example() {
 example()
 ```
 
+New feature: List comprehensions!
+```java
+// Prints the first 1000 prime numbers
+[n | n, range(2, 1000), 1 | True not in 
+  [True | d, range(2,(int(n/2)+1)), 1 | ((n % d) == 0) and n != 2]
+]
+```
+
 ## Start using nebula!
 Download this repository, run `main.py` with a file name to run a script, or with none to start the REPL:
 ```python
@@ -29,7 +38,7 @@ Download this repository, run `main.py` with a file name to run a script, or wit
 >>> 2 + 2
 4
 >>> 'Hello World'
-Hello World 
+Hello World
 ``` 
 ## Examples!
 Look inside `examples/` in this repository!
