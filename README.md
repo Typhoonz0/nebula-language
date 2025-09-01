@@ -5,7 +5,7 @@ a general purpose, simple language
 - Inferred typing
 - Object oriented
 - Simple to learn
-- Powerful 
+- Python interoperability
 
 ```python
 def example() {
@@ -48,3 +48,4 @@ See [docs.md](doc/basics.md) for details.
 
 ## Install the vscode language server!
 See [install.md](nebula-lsp/README.md) for details.
+The Neovim treesitter extension will be added soon.
